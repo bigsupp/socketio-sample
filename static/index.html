@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
+      integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo="
+      crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Sample socket.io</title>
+  </head>
+  <body>
+    <div>Socket connection: <span id="socketStatus"></span></div>
+    <div>Socket ID: <span id="socketId"></span></div>
+    <div>
+      <input id="roomId" type="text" placeholder="roomId" value="room1" />
+      <button id="joinRoom" type="button">join room</button>
+    </div>
+    <ul id="events"></ul>
+    <script>
+      const socket = io();
+      socket.on("connect", () => {
+        console.log("socket connected; socket.id:", socket.id);
+        $("#socketStatus").html("connected");
+        $("#socketId").html(socket.id);
+      });
+      socket.on("disconnect", () => {
+        console.log("socket disconnected");
+        $("#socketStatus").html("disconnected");
+      });
+      $(() => {
+        socket.on("hello", (data) => {
+          console.log("received on::hello", data);
+          $("#events").append(
+            $("<li>").html("on::hello >> " + JSON.stringify(data, null, 2))
+          );
+        });
+        socket.on("formUpdate", (data) => {
+          console.log("received on::formUpdate", data);
+          $("#events").append(
+            $("<li>").html("on::formUpdate >> " + JSON.stringify(data, null, 2))
+          );
+        });
+        $("button#joinRoom").on("click", () => {
+          const roomId = $("#roomId").val();
+          socket.emit("joinRoom", { roomId });
+          $("#events").append(
+            $("<li>").html(`user joinRoom >> room=${roomId}`)
+          );
+        });
+      });
+    </script>
+  </body>
+</html>

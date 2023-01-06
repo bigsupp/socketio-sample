@@ -1,0 +1,15 @@
+{
+  "name": "socketio-sample",
+  "version": "1.0.0",
+  "description": "Sample Socket.io with Express",
+  "main": "server.js",
+  "scripts": {
+    "dev": "npx nodemon server.js"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4"
+  }
+}
